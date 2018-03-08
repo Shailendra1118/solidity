@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+
+        <h1>Shailendra Instructor</h1>
+		<img id="loader" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif">
+        <h2 id="instructor"></h2>
+
+        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <input id="name" type="text">
+
+        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+        <input id="age" type="text">
+
+        <button id="button">Update Instructor</button>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <script>
+       // Our future code here..
+       if(typeof web3 !== 'undefined'){
+       		web3 = new Web3(web3.currentProvider); //mist etc automatically inject this 
+       }else{
+       	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+       }
+       // define default ethereum account to use throught web3 eth defult account method
+       web3.eth.defaultAccount = web3.eth.accounts[0]; //choosing the first one to use
+
+       // need to use eth contract() to create and initiaze contract on Address
+       // It accept ABI interface (application binary interface)
+
+       var ShailendraContract = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getConstructor",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"name": "_age",
+				"type": "uint256"
+			}
+		],
+		"name": "setConstructor",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "age",
+				"type": "uint256"
+			}
+		],
+		"name": "Instructor",
+		"type": "event"
+	}
+]);
+
+       var Shailendra = ShailendraContract.at('0xb07dfded8e17fc1d2e0c117c4f1bf323e3a67170');
+       console.log(Shailendra);
+
+    /*   Shailendra.getConstructor(function(error, result){
+	       	if(!error){
+	       		$('#instructor').html(result[0]+' ('+result[1]+' year old)');
+	       	}else{
+	       		console.log(error);
+	       	}
+	    }); */
+
+	    var event = Shailendra.Instructor();
+	    event.watch(function(error, result){
+	    	if(!error){
+	    		$('#loader').hide();
+	    		$('#instructor').html(result.args.name + '('+ result.args.age +'year old)' );
+	    	}else{
+	    		$('#loader').hide();
+	    		consol.log(error);
+	    	}
+	    });
+
+
+
+       $('#button').click(function(){
+       		Shailendra.setConstructor($('#name').val(), $('#age').val());
+       		$('#loader').show();
+       });
+
+
+
+       
+
+    </script>
+
+</body>
+</html>
