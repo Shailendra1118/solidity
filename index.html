@@ -64,6 +64,23 @@
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"name": "age",
+				"type": "uint256"
+			}
+		],
+		"name": "Instructor",
+		"type": "event"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -82,25 +99,14 @@
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"name": "age",
-				"type": "uint256"
-			}
-		],
-		"name": "Instructor",
-		"type": "event"
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	}
 ]);
 
-       var Shailendra = ShailendraContract.at('0xb07dfded8e17fc1d2e0c117c4f1bf323e3a67170');
+       var Shailendra = ShailendraContract.at('0x17185618453757d844cd20f2d0fde7da21df1424');
        console.log(Shailendra);
 
     /*   Shailendra.getConstructor(function(error, result){
@@ -125,7 +131,13 @@
 
 
        $('#button').click(function(){
-       		Shailendra.setConstructor($('#name').val(), $('#age').val());
+       		Shailendra.setConstructor($('#name').val(), $('#age').val(),(error, success)=>{
+       			if(error){
+       				console.log("Oh no...");
+       			}else{
+       				console.log("successful.")
+       			}
+       		});
        		$('#loader').show();
        });
 
